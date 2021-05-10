@@ -12,50 +12,56 @@ web reference : [Creating a Truffle project using a Truffle Box](https://www.tru
 
 ## Background
 
-`Pete Scandlon` of Pete's Pet Shop is interested in using Ethereum as an efficient way to handle their pet adoptions. 
-The store has space for `16 pets` at a given time, and they already have a database of pets. 
+`Pete Scandlon` of Pete's Pet Shop is interested in using Ethereum as an efficient way to handle their pet adoptions.
+The store has space for `16 pets` at a given time, and they already have a database of pets.
 As an initial proof of concept, Pete wants to see a dapp which associates an Ethereum address with a pet to be adopted.
 
 **Install Truffle:**
 
->npm install -g truffle
- 
->$truffle version
+> npm install -g truffle
+
+> $truffle version
+
     truffle v5.0.17 (core: 5.0.16)\
     Solidity v0.5.0 (solc-js)\
     Node v12.16.2\
     Web3.js v1.0.0-beta.37
-
 
 ## Truffle Directory Structure
 
 The default Truffle directory structure contains the following:
 
 ### contracts/:
+
 Contains the `Solidity` source files for our smart contracts. There is an important contract in here called `Migrations.sol`.
 
-### migrations/: 
+### migrations/:
+
 Truffle uses a migration system to handle smart contract deployments. A migration is an additional special smart contract that keeps track of changes.
 
-### test/: 
+### test/:
+
 Contains both JavaScript and Solidity tests for our smart contracts
 
-### truffle-config.js: 
+### truffle-config.js:
+
 Truffle `configuration` file
 
-
-## Writing the smart contract 
+## Writing the smart contract
 
 We'll start our dapp by writing the smart contract that acts as the back-end logic and storage.
 
 1. Create a new file named `Adoption.sol` in the `contracts/` directory.
- 
-1. variables 
+
+1. variables
+
 ```java
 //This is an array of Ethereum addresses
-address[16] public adopters; 
+address[16] public adopters;
 ```
-1. functions 
+
+1. functions
+
 ```java
 //1. Adopting a pet
 function adopt(uint petId) public returns (uint){
@@ -65,14 +71,17 @@ function adopt(uint petId) public returns (uint){
     adopters[petId]=msg.sender;
     return petId;
 }
-//2. Retrieving the adopters 
+//2. Retrieving the adopters
 function getAdopters() public view returns (address[16] memory) {
   return adopters;
 }
 
 ```
+
 ## Compilation
+
 `truffle compile`
+
 ```
 $truffle compile
 
@@ -92,21 +101,25 @@ Now that we've successfully compiled our contracts, it's time to migrate them to
 1. Create a new file named `2_deploy_contracts.js` in the `migrations/` directory.
 
 1. Add the following content to the `2_deploy_contracts.js` file:
-    ```java
-    var Adoption = artifacts.require("Adoption");
 
-    module.exports = function(deployer) {
-    deployer.deploy(Adoption);
-    };
-    ```
+   ```java
+   var Adoption = artifacts.require("Adoption");
+
+   module.exports = function(deployer) {
+   deployer.deploy(Adoption);
+   };
+   ```
+
 1. Before we can migrate our contract to the blockchain, we need to have a blockchain running. For this tutorial, we're going to use `Ganache`, a `personal blockchain` for Ethereum development you can use to\
-   - deploy contracts, 
-   - develop applications, 
-   - and run tests. 
+
+   - deploy contracts,
+   - develop applications,
+   - and run tests.
 
 1. Back in our terminal, migrate the contract to the blockchain.
-\
-`truffle migrate`
+   \
+   `truffle migrate`
+
 ```
 $truffle migrate
 
@@ -177,47 +190,45 @@ Summary
 ```
 
 ### ACCOUNT
->ADDRESS:
-`0x68F48429F451934fD1032ba63be0f72eB10424EB`
 
->BALANCE:
-99.99 ETH
+> ADDRESS:
+> `0x68F48429F451934fD1032ba63be0f72eB10424EB`
+
+> BALANCE:
+> 99.99 ETH
 
 ### BLOCK 4
->GAS USED:
-27015
 
->GAS LIMIT:
-6721975
+> GAS USED:
+> 27015
 
->MINED ON:
-2021-05-10 00:16:51
+> GAS LIMIT:
+> 6721975
 
->BLOCK HASH:
-0xff3b3ced7aaf850867535310c1f7ec2101d1e171a24aa039903be680a17d0c88
+> MINED ON:
+> 2021-05-10 00:16:51
 
->TX HASH:
-0x9e7caba27f0f8b3265a56985577b7f2659768954bce6f555872d1b998d289757
+> BLOCK HASH:
+> 0xff3b3ced7aaf850867535310c1f7ec2101d1e171a24aa039903be680a17d0c88
 
->CONTRACT CALL
-FROM ADDRESS:
-`0x68F48429F451934fD1032ba63be0f72eB10424EB`
+> TX HASH:
+> 0x9e7caba27f0f8b3265a56985577b7f2659768954bce6f555872d1b998d289757
 
->TO CONTRACT ADDRESS:
-`0x4A247CE60ed2DAEd0018a99A474B26b436c8C263`
+> CONTRACT CALL
+> FROM ADDRESS:
+> `0x68F48429F451934fD1032ba63be0f72eB10424EB`
 
->GAS USED:
-27015
+> TO CONTRACT ADDRESS:
+> `0x4A247CE60ed2DAEd0018a99A474B26b436c8C263`
 
+> GAS USED:
+> 27015
 
-- In `Ganache`, note that 
+- In `Ganache`, note that
   - the state of the blockchain has changed. The blockchain now shows that the current block, previously `0`, is now `4`.
   - first account originally had `100` ether, it is now lower `99.99` ether
 
-
-## Testing the smart contract using Solidity 
-
-
+## Testing the smart contract using Solidity
 
 1. Create a new file named `TestAdoption.sol` in the `test/` directory.
 
@@ -226,7 +237,7 @@ FROM ADDRESS:
 ```java
 pragma solidity ^0.5.0;
 
-import "truffle/Assert.sol";//Gives us various assertions to use in our tests. 
+import "truffle/Assert.sol";//Gives us various assertions to use in our tests.
 import "truffle/DeployedAddresses.sol";//This smart contract gets the address of the deployed contract.
 import "../contracts/Adoption.sol";//The smart contract we want to test.
 
@@ -238,7 +249,7 @@ contract TestAdoption {
     // The id of the pet that will be used for testing
     uint expectedPetId = 8;
 
-    // The expected owner of adopted pet is this contract 
+    // The expected owner of adopted pet is this contract
     address expectedAdopter = address(this);
 
 
@@ -270,9 +281,10 @@ contract TestAdoption {
 }
 ```
 
+## Running the tests
 
-## Running the tests 
 `truffle test`
+
 ```
 $truffle test
 Using network 'development'.
@@ -296,3 +308,47 @@ Compiling your contracts...
   3 passing (25s)
 ```
 
+## Creating a user interface to interact with the smart contract
+
+it's time to create a UI so that Pete has something to use for his pet shop!
+
+### Instantiating web3
+
+1. Open `/src/js/app.js` in a text editor.
+1. Note that
+
+   1. global App object to manage our application,
+   1. load in the pet data in `init()`
+   1. then call the function `initWeb3()`.
+   1. The web3 JavaScript library interacts with the Ethereum blockchain. It can
+      1. retrieve user accounts,
+      1. send transactions,
+      1. interact with smart contracts, and more.
+
+   Remove the multi-line comment from within initWeb3 and replace it with the following:
+
+```js
+// Modern dapp browser...
+if (window.ethereum) {
+  App.web3Provider = window.ethereum;
+
+  try {
+    //Request account access
+    await window.ethereum.enable();
+  } catch (error) {
+    //User denied account access
+    console.log("User denied account access");
+  }
+}
+
+// Legacy dapp browsers..
+else if (window.web3) {
+  App.web3Provider = window.web3.currentProvider;
+}
+// if no injected web3 instance is detected
+else {
+  App.web3Provider = new Web3.providers.HttpProvider("http://localhost:8545");
+}
+
+web3 = new Web3(App.web3Provider);
+```
