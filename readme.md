@@ -1,4 +1,4 @@
-## In this tutorial we will be covering:
+# In this tutorial we will be covering
 
 web reference : [Creating a Truffle project using a Truffle Box](https://www.trufflesuite.com/tutorial)
 
@@ -7,7 +7,7 @@ web reference : [Creating a Truffle project using a Truffle Box](https://www.tru
 3. Writing the smart contract
 4. Compiling and migrating the smart contract
 5. Testing the smart contract
-6. Creating a user interface to interact with the smart contract
+6. Creating a user interface to interact with the smart contract (not fully documented )
 7. Interacting with the dapp in a browser
 
 ## Background
@@ -19,7 +19,6 @@ As an initial proof of concept, Pete wants to see a dapp which associates an Eth
 **Install Truffle:**
 
 > npm install -g truffle
-
 > $truffle version
 
     truffle v5.0.17 (core: 5.0.16)\
@@ -31,19 +30,19 @@ As an initial proof of concept, Pete wants to see a dapp which associates an Eth
 
 The default Truffle directory structure contains the following:
 
-### contracts/:
+### contracts
 
 Contains the `Solidity` source files for our smart contracts. There is an important contract in here called `Migrations.sol`.
 
-### migrations/:
+### migrations
 
 Truffle uses a migration system to handle smart contract deployments. A migration is an additional special smart contract that keeps track of changes.
 
-### test/:
+### test
 
 Contains both JavaScript and Solidity tests for our smart contracts
 
-### truffle-config.js:
+### truffle-config.js
 
 Truffle `configuration` file
 
@@ -57,12 +56,14 @@ We'll start our dapp by writing the smart contract that acts as the back-end log
 
 ```java
 //This is an array of Ethereum addresses
-address[16] public adopters;
+{
+   address[16] public adopters;
 ```
 
 1. functions
 
 ```java
+}
 //1. Adopting a pet
 function adopt(uint petId) public returns (uint){
 
@@ -329,30 +330,30 @@ it's time to create a UI so that Pete has something to use for his pet shop!
       1. send transactions,
       1. interact with smart contracts, and more.
 
-   Remove the multi-line comment from within initWeb3 and replace it with the following:
+      Remove the multi-line comment from within initWeb3 and replace it with the following:
 
-```js
-// Modern dapp browser...
-if (window.ethereum) {
-  App.web3Provider = window.ethereum;
+      ```js
+      // Modern dapp browser...
+      if (window.ethereum) {
+      App.web3Provider = window.ethereum;
 
-  try {
-    //Request account access
-    await window.ethereum.enable();
-  } catch (error) {
-    //User denied account access
-    console.log("User denied account access");
-  }
-}
+      try {
+         //Request account access
+         await window.ethereum.enable();
+      } catch (error) {
+         //User denied account access
+         console.log("User denied account access");
+      }
+      }
 
-// Legacy dapp browsers..
-else if (window.web3) {
-  App.web3Provider = window.web3.currentProvider;
-}
-// if no injected web3 instance is detected
-else {
-  App.web3Provider = new Web3.providers.HttpProvider("http://localhost:8545");
-}
+      // Legacy dapp browsers..
+      else if (window.web3) {
+      App.web3Provider = window.web3.currentProvider;
+      }
+      // if no injected web3 instance is detected
+      else {
+      App.web3Provider = new Web3.providers.HttpProvider("http://localhost:8545");
+      }
 
-web3 = new Web3(App.web3Provider);
-```
+      web3 = new Web3(App.web3Provider);
+      ```
