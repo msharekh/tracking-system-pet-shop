@@ -318,8 +318,12 @@ it's time to create a UI so that Pete has something to use for his pet shop!
 1. Note that
 
    1. global App object to manage our application,
-   1. load in the pet data in `init()`
+   1. load in the pet data `pets.json` in `init()` petTemplate/petsRow
    1. then call the function `initWeb3()`.
+      ```js
+      // Request account access
+      await window.ethereum.enable();
+      ```
    1. The web3 JavaScript library interacts with the Ethereum blockchain. It can
       1. retrieve user accounts,
       1. send transactions,
